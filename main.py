@@ -6,10 +6,10 @@ from pathlib import Path
 from fer import FER
 from fer.classes import Video
 
-app = Flask(__name)
+app = Flask(__name__)
 
 def analyze_video(video_file, mtcnn):
-    video = Video(video_file)
+    video = Video(str(video_file))  # Convert video_path to a string
     detector = FER(mtcnn=mtcnn)
 
     # Output list of dictionaries
