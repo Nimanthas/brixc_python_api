@@ -69,33 +69,63 @@ def analyze_video_endpoint():
 def get_task_result(task_id):
     if task_id in task_results:
         result = task_results[task_id]
+        if len(result) in result:
+            return jsonify({'type': 'ERROR','task_id': task_id, 'message': 'Task not found or not completed yet.', 'emotions': [], 'average_emotions': [], 'traits': [], 'dominant_trait': []})
+        else:
+            # Calculate average emotions
+            average_emotions = {}
+            for entry in result:
+                for emotion, value in entry.items():
+                    if emotion in average_emotions:
+                        average_emotions[emotion] += value
+                    else:
+                        average_emotions[emotion] = value
 
-        # Calculate average emotions
-        average_emotions = {}
-        for entry in result:
-            for emotion, value in entry.items():
-                if emotion in average_emotions:
-                    average_emotions[emotion] += value
-                else:
-                    average_emotions[emotion] = value
+            total_entries = len(result)
+            for emotion in average_emotions:
+                average_emotions[emotion] /= total_entries
 
-        total_entries = len(result)
-        for emotion in average_emotions:
-            average_emotions[emotion] /= total_entries
+            # Convert scores to percentages
+            for emotion, value in average_emotions.items():
+                average_emotions[emotion] = round(value * 100, 2)
 
-        # Convert scores to percentages
-        for emotion, value in average_emotions.items():
-            average_emotions[emotion] = round(value * 100, 2)
+            # Calculate the Big Five traits scores
+            openness = (average_emotions["happy"] + average_emotions["surprise"]) / 2
+            conscientiousness = average_emotions["neutral"]
+            extroversion = average_emotions["happy"]
+            agreeableness = (average_emotions["happy"] + average_emotions["neutral"]) / 2
+            neuroticism = (average_emotions["angry"] + average_emotions["sad"] + average_emotions["fear"] +
+            average_emotions["disgust"]) / 4
 
-        # Delete the output file after the result is obtained
-        try:
-            os.remove(f'input\\{task_id}.mp4')
-        except Exception as e:
-            print(f"Error deleting input result file: {str(e)}")
+            # Store the results in a dictionary
+            traits = {
+                "openness": openness,
+                "conscientiousness": conscientiousness,
+                "extroversion": extroversion,
+                "agreeableness": agreeableness,
+                "neuroticism": neuroticism
+            }
 
-        return jsonify({'task_id': task_id, 'emotions': result, 'average_emotions': average_emotions})
+            # Determine the dominant trait
+            dominant_trait = max(traits, key=traits.get)
+
+            # Delete the output file after the result is obtained
+            try:
+                os.remove(f'input\\{task_id}.mp4')
+            except Exception as e:
+                print(f"Error deleting input result file: {str(e)}")
+
+            return jsonify({
+                'type': 'SUCCESS',
+                'task_id': task_id,
+                'message': 'Successfully',
+                'emotions': result,
+                'average_emotions': [average_emotions],
+                'traits': [traits],
+                'dominant_trait': [dominant_trait]
+            })
     else:
-        return jsonify({'task_id': task_id, 'message': 'Task not found or not completed yet.'})
+        return jsonify({'type': 'ERROR','task_id': task_id, 'message': 'Task not found or not completed yet.', 'emotions': [], 'average_emotions': [], 'traits': [], 'dominant_trait': []})
 
 if __name__ == "__main__":
         app.run(host='localhost', port=8281, debug=True)
