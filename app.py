@@ -10,7 +10,6 @@ from concurrent.futures import ThreadPoolExecutor
 import uuid
 from flask_cors import CORS
 
-
 app = Flask(__name__)
 CORS(app)
 executor = ThreadPoolExecutor()
