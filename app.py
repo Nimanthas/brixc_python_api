@@ -90,12 +90,12 @@ def get_task_result(task_id):
                 average_emotions[emotion] = round(value * 100, 2)
 
             # Calculate the Big Five traits scores
-            openness = (average_emotions["happy"] + average_emotions["surprise"]) / 2
-            conscientiousness = average_emotions["neutral"]
-            extroversion = average_emotions["happy"]
-            agreeableness = (average_emotions["happy"] + average_emotions["neutral"]) / 2
-            neuroticism = (average_emotions["angry"] + average_emotions["sad"] + average_emotions["fear"] +
-            average_emotions["disgust"]) / 4
+            openness = round((average_emotions["happy"] + average_emotions["surprise"]) / 2, 2)
+            conscientiousness = round(average_emotions["neutral"], 2)
+            extroversion = round(average_emotions["happy"], 2)
+            agreeableness = round((average_emotions["happy"] + average_emotions["neutral"]) / 2, 2)
+            neuroticism = round((average_emotions["angry"] + average_emotions["sad"] + average_emotions["fear"] +
+            average_emotions["disgust"]) / 4, 2)
 
             # Store the results in a dictionary
             traits = {
