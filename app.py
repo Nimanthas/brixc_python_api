@@ -9,6 +9,11 @@ from fer.classes import Video
 from concurrent.futures import ThreadPoolExecutor
 import uuid
 from flask_cors import CORS
+from pyvirtualdisplay import Display
+
+# Create a virtual display to support GUI-based packages like OpenCV
+display = Display(visible=0, size=(1366, 768))
+display.start()
 
 
 app = Flask(__name__)
