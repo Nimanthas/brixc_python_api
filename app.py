@@ -8,8 +8,11 @@ from fer import FER
 from fer.classes import Video
 from concurrent.futures import ThreadPoolExecutor
 import uuid
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 executor = ThreadPoolExecutor()
 
 # Create a dictionary to track task statuses and results
@@ -95,4 +98,5 @@ def get_task_result(task_id):
         return jsonify({'task_id': task_id, 'message': 'Task not found or not completed yet.'})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+        app.run(host='localhost', port=8281, debug=True)
+
