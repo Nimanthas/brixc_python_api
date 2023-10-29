@@ -1,7 +1,4 @@
-import cv2
-import io
 import os
-import numpy as np
 from flask import Flask, request, jsonify
 from pathlib import Path
 from fer import FER
