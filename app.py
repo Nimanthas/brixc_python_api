@@ -127,5 +127,6 @@ def get_task_result(task_id):
         return jsonify({'type': 'ERROR','task_id': task_id, 'message': 'Task not found or not completed yet.', 'emotions': [], 'average_emotions': [], 'traits': [], 'dominant_trait': []})
 
 if __name__ == "__main__":
-        app.run(host='localhost', port=8281, debug=True)
+    app.run()
+        #app.run(host='localhost', port=8281, debug=True)
 
